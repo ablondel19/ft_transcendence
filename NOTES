@@ -1,0 +1,8 @@
+<< GENERATE CONTROLLER >> 
+nest g co [name] 
+
+<< GENERATE MODULE >> 
+nest g mo [name]
+
+<< GENERATE SERVICE >>
+nest g s [name]
