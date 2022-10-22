@@ -27,28 +27,7 @@ export class UserService {
     user.numberOfVictories = 0;
     user.numberOfDefeats = 0;
     user.VictoriesInARow = 0;
-    user.matchHistory = 
-    //TEST--
-    [{
-        "opponent": "OpponentX",
-        "level": "map1",
-        "personnalScore" : 10,
-        "opponentScore" : 0
-      },
-      {
-        "opponent": "OpponentY",
-        "level": "map2",
-        "personnalScore" : 8,
-        "opponentScore" : 10
-      }
-    ];
-    // Search for canvas usage
-    // leaderboard always visible
-    // login system with valdation decorators for login and password 
-    ////////////////////////////////////////// Export function for validation errors
-    //validate(user).then(errors => {
-    //  // ...
-    //}); // it will return errors for email, title and text properties
+    user.matchHistory = [];
     return this.repository.save(user);
   }
 
@@ -57,7 +36,9 @@ export class UserService {
   }
 
   public getAll() {
-    return this.repository.find();
+    return this.repository.createQueryBuilder("user")
+    .select(['user.name'])
+    .getMany();
   }
 
   public deleteAll() {
