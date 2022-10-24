@@ -1,16 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { getRepository, Repository } from 'typeorm';
+import { FindCondition, Repository } from 'typeorm';
 import { CreateUserDto } from './user.dto';
 import { User } from './user.entity';
 import { encodePassword } from '../bcrypt/bcrypt';
+import { userInfo } from 'os';
+import { UserModule } from './user.module';
+import { SerializedUser } from './user.types'; 
+import { plainToClass } from 'class-transformer';
 
 @Injectable()
 export class UserService {
   @InjectRepository(User)
   private readonly repository: Repository<User>;
 
-  public getUserById(id: number): Promise<User> {
+  public getUserById(id: number) {
     return this.repository.findOne(id);
   }
 
@@ -18,7 +22,7 @@ export class UserService {
     return this.repository.findOne(name);
   }
 
-  public createUser(body: CreateUserDto): Promise<User> {
+  public createUser(body: CreateUserDto) {
     const user: User = new User();
     const hash_pwd = encodePassword(body.password);
     user.name = body.name;
@@ -37,7 +41,8 @@ export class UserService {
 
   public getAll() {
     return this.repository.createQueryBuilder("user")
-    .select(['user.name'])
+    .select(['user.name', 'user.email'])
+    .orderBy('user.name', 'ASC')
     .getMany();
   }
 
