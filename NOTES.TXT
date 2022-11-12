@@ -1,0 +1,50 @@
+Petit script pour installer les dependencies et la database avec brew: 
+
+cd nest_project && sh start.sh
+
+ca risque de prendre un moment...
+
+........................................................................
+
+pour acceder a la database il faudra la creer d'abord je pense:
+psql postgres
+CREATE DATABASE nest_api;
+\q pour quitter puis faire des curl POST genre 
+curl -X POST localhost:3000/user -d "name=user1&email=user1@1.com&password=1234"
+
+ou bien pour en ajouter 10 fakes:
+cd nest_project && sh post_phonies.sh
+
+\l pour lister les database
+
+\c nest_api pour choisir la db cree
+
+\d+ pour voir ttes les columns
+
+SELECT name FROM public.user; pour voir les usernames (pas oublier 'public.' avant la data)
+
+ou alors faire des fonctions dans user.services.ts genre
+
+public getMerguez() {
+    return this.repository.createQueryBuilder("user")
+    .select(['user.name', 'user.email'])
+    .orderBy('user.name', 'ASC')
+    .getMany();
+  }
+
+pour recup les data et les trier par exemple puis ajouter une route pour call la fonction.
+
+\q pour quit
+
+........................................................................
+
+pour le moment j'ai tout laissé par defaut mais ça permettra deja de coder qques trucs et faire des tests. WALLAH c'est moche mais ça marche
+
+dans le fichier src/user/user.controller.ts oon peut setup les routes et methodes GET, POST etc
+puis on importe les fonctions depuis user.services.ts et on les call depuis le controller.
+
+user.entity.ts contient le formattage de la table dans la db pour chaque user
+
+user.dto.ts contient les regles pour valider une requete post
+
+user.types.ts contient juste des trucs que j'ai test mais c'est pas fini et je les utilise nulle part
